@@ -6,6 +6,9 @@ class Book < ApplicationRecord
   # 例）ユーザーが退会した時に、そのユーザーの投稿やいいねも一緒に消えるようにする処理
   has_many :favorites,     dependent: :destroy
   has_many :book_comments, dependent: :destroy
+  # has_many :yyy(架空のテーブル名), through: :xxx(中間テーブル), source: :zzz（持ってくるデータのモデル名）で、テーブル同士が中間テーブルを通じてつながっていることを表現します。
+  # favorited_usersは、favoritesテーブルを通って、userモデルのデータを持ってくる。
+  has_many :favorited_users, through: :favorites, source: :user
 
   validates :title, presence: true
   validates :body,  presence: true, length: {maximum: 200}

@@ -3,7 +3,17 @@ class BooksController < ApplicationController
   before_action :correct_user, only: [:edit, :update]
 
   def index
-    @books = Book.all
+    # 過去一週間でいいねの多い順に投稿を表示
+    # 下記２つの記述で一週間分のデータを取得
+    to = Time.current.at_end_of_day
+    from = (to - 6.day).at_beginning_of_day
+    # includesは、無駄にSQL文（データベースへ指示を出す言語）が実行されるのを防ぐ
+    @books = Book.includes(:favorited_users).
+      # a <=> b で昇順（少ない順）、b <=> a で降順（多い順）
+      sort {|a, b|
+        b.favorited_users.includes(:favorites).where(created_at: from...to).size <=>
+        a.favorited_users.includes(:favorites).where(created_at: from...to).size
+      }
     @book = Book.new
   end
 
