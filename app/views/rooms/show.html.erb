@@ -1,0 +1,25 @@
+<!-- 名前 -->
+<div class="mt-2">
+  <% @entries.each do |e| %>
+    <h2><%= e.user.name %>さんとのチャット</h2>
+  <% end %>
+</div>
+
+<!-- 投稿フォーム -->
+<div class="mt-2">
+  <%= form_for @message do |f| %>
+    <%= f.text_field :content, size: 70 %>
+    <%= f.hidden_field :room_id, value: @room.id %>  <!-- どのチャットルームのメッセージか判断するために、f.hidden_fieldでroom_idのvalueとして、チャットルームでのidを取得
+  <% end %>
+</div>
+
+<!-- メッセージ -->
+<div class="mt-2">
+  <% if @messages.present? %>
+    <% @messages.each do |m| %>
+      <div class="text-center">
+        <%= m.content %><br>
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -22,12 +22,32 @@
   <% if current_user != user %>
     <% if current_user.following?(user) %>
       <%= link_to "フォロー外す", user_relationships_path(user.id), method: :delete, class: "btn btn-info" %>
+      <!-- DM機能 -->
+      <!-- 相互フォロー状態の時という条件 -->
+      <% if (current_user.following? user) && (user.following? current_user) %>
+      <!-- 既にチャットルームが作成している時と作成されていない時の条件分岐 -->
+      <% if @isRoom == true %>
+        <%= link_to "DM", room_path(@roomId), class: "btn", :style => "color:blue;" %>
+      <% else %>
+        <!-- レコードには、親モデルと子モデルの両方に保存する必要がある -->
+        <%= form_with model: @room do |f| %>  <!-- 親モデル -->
+          <%= fields_for @entry do |e| %>     <!-- 子モデル -->
+            <%= e.hidden_field :user_id, value: user.id %>  <!-- Entryテーブルのレコードにはuser_idを送る必要があるので、hidden_fieldでuser.iをvalueにおく -->
+          <% end %>
+          <%= f.submit "chatを始める", class: "btn", :style => "color:blue;" %>
+        <% end %>
+      <% end %>
+    <% end %>
     <% else %>
       <%= link_to "フォローする", user_relationships_path(user.id), method: :post, class: "btn btn-success" %>
     <% end %>
+    <!-- DM機能 -->
   <% else %>
     <%= link_to edit_user_path(user), class: "btn btn-outline-secondary btn-block" do %>
       <i class="fas fa-user-cog"></i>
     <% end %>
   <% end %>
 </div>
+
+
+

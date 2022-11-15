@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :books,         dependent: :destroy
   has_many :favorites,     dependent: :destroy
   has_many :book_comments, dependent: :destroy
+  has_many :entries,       dependent: :destroy
+  has_many :messages,      dependent: :destroy
   # フォローした、されたの関係
   # relationshipsとreverse_of_relationshipsはアソシエーション（例：どれが誰の投稿なのかを関連づけるもの）がつながっているテーブル名
   # class_nameは実際のモデル名前
